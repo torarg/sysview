@@ -1,3 +1,6 @@
+# 0.0.4
+- fix worst status detection when cache is empty
+
 # 0.0.3
 - add support for different content types
 
