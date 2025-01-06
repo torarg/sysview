@@ -1,0 +1,146 @@
+#!/bin/sh
+
+usage="usage: sysview [-hV] HTML_ROOT"
+cache_dir="$HOME/.cache/sysview"
+config_dir="/usr/local/share/sysview"
+css_file="${config_dir}/style.css"
+
+version="0.0.1"
+
+err_exit() {
+    echo "error: $@" 1>&2
+    exit 1
+}
+
+html_head() {
+    echo "$(cat <<EOF
+<html>
+    <head>
+        <title>$1</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+    <header>
+        <div><a class="header_link" href=index.html>sysview</a></div>
+        <div>:</div>
+        <div>$1</div>
+    </header>
+    <main>
+    <section class="tiles-container">
+EOF
+)"
+}
+
+html_foot() {
+    echo "$(cat <<EOF
+    </section>
+    </main>
+    <footer>with lots of luv for simple shit <3</footer>
+    </body>
+</html>
+EOF
+)"
+}
+
+
+parse_report() {
+    report_started=0
+    report=""
+    worst_status="0"
+
+    while read line; do
+        if [[ "$line" == "Hostname: "* ]] ; then
+            report_started=1
+            hostname=$(echo "$line" | awk '{ print $2 }')
+            report="${report}${line}\n"
+        elif [[ "$line" == "Date: "* ]] && [ "$report_started" -eq "1" ]; then
+            date=$(echo "$line" | cut -f 2- -d " ")
+            report="${report}${line}\n"
+        elif [ "$report_started" -eq "1" ]; then
+            [[ "$line" == "CRITICAL: "* ]] && worst_status=2
+            [[ "$line" == "WARNING: "* ]] && [ "$worst_status" -lt "1" ] && worst_status=1
+            report="${report}${line}\n"
+        fi
+    done
+
+    if [ -z "$hostname" ] || [ -z "$date" ] || [ -z "$report" ]; then
+        err_exit "failed parsing report"
+    fi
+
+    case ${worst_status} in
+        0) worst_status="ok" ;;
+        1) worst_status="warn" ;;
+        2) worst_status="crit" ;;
+    esac
+}
+
+detail() {
+
+    parse_report
+    cache_file="${cache_dir}/${hostname}.html.part"
+    detail_view_file="${html_root}/${hostname}.html"
+
+    [ -f "$cache_file" ] && rm $cache_file
+    [ -f "$detail_view_file" ] && rm $detail_view_file
+
+    cat > ${cache_file} <<EOF
+<a href="$hostname.html">
+    <div class="tile_$worst_status">
+        <h4>$hostname</h5>
+        <p>$date</p>
+    </div>
+</a>
+EOF
+
+
+    html_head "$hostname" > $detail_view_file
+    cat >> $detail_view_file <<EOF
+        <pre>
+$(echo "$report")
+        </pre>
+EOF
+    html_foot >> $detail_view_file
+
+}
+
+overview() {
+    tmp_index_file="${cache_dir}/index.html"
+
+    # write head
+    html_head "overview" > $tmp_index_file
+
+    for file in ${cache_dir}/*.part; do
+        if grep -q tile_crit $file; then
+            cat $file >> $tmp_index_file
+        fi
+    done
+    for file in ${cache_dir}/*.part; do
+        if grep -q tile_ok $file; then
+            cat $file >> $tmp_index_file
+        fi
+    done
+
+    # write foot
+    html_foot >> $tmp_index_file
+
+    cp $tmp_index_file $html_root/index.html
+        
+}
+
+while getopts :hV flag; do
+    case "${flag}" in
+        h) echo "$usage" && exit 0 ;;
+        V) echo "$version" && exit 0 ;;
+        ?) err_exit "invalid args" ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+html_root="$1"
+
+[ -z "$html_root" ] && err_exit "no html root"
+[ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
+
+cp $css_file $html_root/
+detail
+overview
