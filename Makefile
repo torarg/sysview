@@ -46,7 +46,7 @@ pkg: clean-pkg
 publish-pkg: pkg
 	scp $(OPENBSD_SIGNED_PKG_DIR)/$(NAME)-*.tgz www:
 	ssh $(OPENBSD_PKG_HOST) "\
-		doas rm /var/www/htdocs/pub/OpenBSD/snapshots/packages/amd64/$(NAME)-*.tgz && \
+		doas rm /var/www/htdocs/pub/OpenBSD/snapshots/packages/amd64/$(NAME)-*.tgz ; \
 		doas cp $(NAME)-*.tgz /var/www/htdocs/pub/OpenBSD/snapshots/packages/amd64/ && \
 		doas rm $(NAME)-*.tgz && \
 		doas chown www /var/www/htdocs/pub/OpenBSD/snapshots/packages/amd64/$(NAME)-*.tgz \

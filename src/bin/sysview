@@ -64,7 +64,8 @@ parse_report() {
     done
 
     if [ -z "$hostname" ] || [ -z "$date" ] || [ -z "$report" ]; then
-        err_exit "failed parsing report"
+        echo "failed parsing report"
+        exit 0
     fi
 
     case ${worst_status} in
