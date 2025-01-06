@@ -73,11 +73,17 @@ parse_report() {
 }
 
 get_worst_status() {
-    if grep -q "CRITICAL: " ${cache_dir}/${hostname}.html.detail.part.*; then
+    if [ ! -f ${cache_dir}/${hostname}.html.detail.part.* ]; then
+        text="$report"
+    else
+        text="$(cat ${cache_dir}/${hostname}.html.detail.part.*)"
+    fi
+
+    if echo "$text" | grep -q "CRITICAL: "; then
         worst_status="crit"
-    elif grep -q "WARNING: " ${cache_dir}/${hostname}.html.detail.part.*; then
+    elif echo "$text" | grep -q "WARNING: "; then
         worst_status="warn"
-    elif grep -q "OK: " ${cache_dir}/${hostname}.html.detail.part.*; then
+    elif echo "$text" | grep -q "OK: "; then
         worst_status="ok"
     else
         worst_status="unknown"
