@@ -43,6 +43,32 @@ EOF
 }
 
 
+parse_report_items() {
+    item_count=0
+    item_pointer=0
+    while read line; do
+        if [ "$line" == "---" ] && [ "$item_count" -eq "0" ]; then
+            item_count=1
+            item_pointer=1
+            items="${items}<pre>\n"
+        elif [ "$line" == "---" ] && [ "$item_count" -gt "0" ]; then
+            items="${items}</pre>"
+            item_count="$((item_count + 1 ))"
+        elif [ "$item_count" -gt "0" ] && [ "$item_pointer" -ne "$item_count" ]; then
+            items="${items}<pre>\n${line}\n"
+            item_pointer="$((item_pointer + 1 ))"
+        elif [ "$item_count" -gt "0" ]; then
+            items="${items}${line}\n"
+        fi
+    done
+    if [ -n "$items" ]; then
+        items="$(echo "$items" | sed '$ d')"
+        items="$items\n</pre>"
+    fi
+    echo "$items"
+}
+
+
 parse_report() {
     report_started=0
     report=""
@@ -69,14 +95,14 @@ parse_report() {
     fi
 
     [ -z "$type" ] && type="sysreport" # fallback for now, since this is a new field
-
+    #echo "$report"
 }
 
 get_worst_status() {
-    if [ ! -f ${cache_dir}/${hostname}.html.detail.part.* ]; then
-        text="$report"
-    else
+    if stat -q ${cache_dir}/${hostname}.html.detail.part.* > /dev/null; then
         text="$(cat ${cache_dir}/${hostname}.html.detail.part.*)"
+    else
+        text="$report"
     fi
 
     if echo "$text" | grep -q "CRITICAL: "; then
@@ -93,6 +119,7 @@ get_worst_status() {
 update_cache() {
     worst_status="unknown"
     parse_report
+    report_items="$(echo "$report" | parse_report_items)"
     get_worst_status
     overview_part="${cache_dir}/${hostname}.html.overview.part"
     detail_view_part="${cache_dir}/${hostname}.html.detail.part.${type}"
@@ -108,12 +135,7 @@ update_cache() {
 </a>
 EOF
 
-
-    cat >> $detail_view_part <<EOF
-        <pre>
-$(echo "$report")
-        </pre>
-EOF
+    echo "$report_items" >> $detail_view_part
 
 }
 
