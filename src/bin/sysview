@@ -35,7 +35,14 @@ html_foot() {
     echo "$(cat <<EOF
     </section>
     </main>
-    <footer>with lots of luv for simple shit <3</footer>
+    <footer>
+    <div>
+        <pre id="legend" class="item_ok">OK</pre>
+        <pre id="legend" class="item_warning">Warning</pre>
+        <pre id="legend" class="item_critical">Critical</pre>
+        <pre id="legend" class="item_unknown">Unknown</pre>
+        <pre id="legend" class="item_outdated">Outdated</pre>
+    </div>
     </body>
 </html>
 EOF
