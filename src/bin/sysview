@@ -49,6 +49,7 @@ parse_report_items() {
     while read line; do
         if echo "$line" |egrep -q '^OK:|^CRITICAL:|^WARNING:|^UNKNOWN:'; then
             item_status="$(echo $line | cut -f 1 -d ':' |  tr '[:upper:]' '[:lower:]')"
+            items="${items}$(echo "Last seen: $date")\n"
         fi
         if [ "$line" == "---" ] && [ "$item_count" -eq "0" ]; then
             item_count=1
@@ -111,11 +112,8 @@ get_worst_status() {
         find ${cache_dir}/${hostname}.html.detail.part.* -mtime +1 -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
         for file in  ${cache_dir}/${hostname}.html.detail.part.*; do
             if [[ "$file" == *".part.${type}"* ]]; then
-                echo "skipping $file"
                 continue
             fi
-            echo $file
-            echo $type
             text="${text}\n$(cat ${file})"
         done
     fi
