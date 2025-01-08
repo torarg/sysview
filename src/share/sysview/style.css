@@ -158,7 +158,8 @@ footer {
 
 	pre {
 		font-size: 3.5vw;
-        max-width: 100%;
+	        max-width: 100%;
+		margin-bottom: 3%;
 	}
 
 	header {
@@ -168,5 +169,6 @@ footer {
 	[class*="tile_"] {
 		width: 70vw;
 		height: 13vw;
+		margin-bottom: 3%;
 	}
 }
