@@ -1,5 +1,5 @@
 DISTNAME		=	sysview-${V}
-V				=	0.0.9
+V				=	0.0.10
 COMMENT			=	html views for sysreport.
 CATEGORIES		=	sysutils
 
