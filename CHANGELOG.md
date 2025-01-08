@@ -1,3 +1,6 @@
+# 0.0.7
+- improve css
+
 # 0.0.6
 - update status colors
 - add status color explanation
