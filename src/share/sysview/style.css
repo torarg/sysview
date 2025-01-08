@@ -15,6 +15,7 @@ pre {
   flex: 1 0 300px;
   padding: 5px;
   margin: 10;
+  text-align: left;
 }
 body {
     font-family: 'Arial', sans-serif;
@@ -39,12 +40,13 @@ header {
 main {
     max-width: 98%;
     margin: 10px auto;
+    text-align: center;
+    align: center;
 }
 
 .tiles-container {
     display: flex;
     flex-wrap: wrap;
-    text-align: left;
 }
 
 .item_ok {
