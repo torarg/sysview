@@ -45,6 +45,7 @@ main {
     margin: 10px auto;
     text-align: center;
     align: center;
+    margin-bottom: 100px;
 }
 
 .tiles-container {
@@ -85,9 +86,6 @@ main {
     width: 300px;
     height: 100px;
 }
-.tile_ok:hover {
-    transform: scale(1.05);
-}
 
 .tile_crit {
     flex: 1 0 300px;
@@ -99,9 +97,6 @@ main {
     padding: 1px;
     width: 300px;
     height: 100px;
-}
-.tile_crit:hover {
-    transform: scale(1.05);
 }
 
 .tile_warn {
@@ -115,9 +110,6 @@ main {
     width: 300px;
     height: 100px;
 }
-.tile_warn:hover {
-    transform: scale(1.05);
-}
 
 .tile_outdated {
     flex: 1 0 300px;
@@ -129,9 +121,6 @@ main {
     padding: 1px;
     width: 300px;
     height: 100px;
-}
-.tile_outdated:hover {
-    transform: scale(1.05);
 }
 
 .tile_unknown {
@@ -145,9 +134,6 @@ main {
     width: 300px;
     height: 100px;
 }
-.tile_unknown:hover {
-    transform: scale(1.05);
-}
 
 footer {
     background-color: #333;
@@ -155,7 +141,6 @@ footer {
     text-align: center;
     padding: 10px;
   position: fixed;
-  left: 0;
   bottom: 0;
   width: 100%;
 }
