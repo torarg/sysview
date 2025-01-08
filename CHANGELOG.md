@@ -1,3 +1,7 @@
+# 0.0.6
+- update status colors
+- add status color explanation
+
 # 0.0.5
 - add outdated detection
 - display report parts individually
