@@ -1,5 +1,8 @@
-# 0.0.4
+# 0.0.5
+- add outdated detection
 - display report parts individually
+
+# 0.0.4
 - fix worst status detection when cache is empty
 
 # 0.0.3
