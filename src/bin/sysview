@@ -105,13 +105,19 @@ parse_report() {
 }
 
 get_worst_status() {
+    outdated=0
     if stat -q ${cache_dir}/${hostname}.html.detail.part.* > /dev/null; then
         text="$(cat ${cache_dir}/${hostname}.html.detail.part.*)"
+        if find ${cache_dir}/${hostname}.html.detail.part.* -mtime +1; then
+            outdated=1
+        fi
     else
         text="$report"
     fi
 
     if echo "$text" | grep -q "CRITICAL: "; then
+        worst_status="crit"
+    elif [ "$outdated" -eq "1" ]; then
         worst_status="crit"
     elif echo "$text" | grep -q "WARNING: "; then
         worst_status="warn"
