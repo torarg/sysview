@@ -47,6 +47,23 @@ main {
     text-align: left;
 }
 
+.item_ok {
+    background-color: lightgreen;
+    color: black;
+}
+.item_warning {
+    background-color: lightyellow;
+    color: black;
+}
+.item_critical {
+    background-color: #ffcccb;
+    color: black;
+}
+.item_unknown {
+    background-color: lightgrey;
+    color: black;
+}
+
 .tile_ok {
     flex: 1 0 300px;
     background-color: lightgreen;
