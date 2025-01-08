@@ -105,19 +105,24 @@ parse_report() {
 }
 
 get_worst_status() {
-    outdated=0
+    text="$report"
     if stat -q ${cache_dir}/${hostname}.html.detail.part.* > /dev/null; then
-        text="$(cat ${cache_dir}/${hostname}.html.detail.part.*)"
-        if find ${cache_dir}/${hostname}.html.detail.part.* -mtime +1; then
-            outdated=1
-        fi
-    else
-        text="$report"
+        #find ${cache_dir}/${hostname}.html.detail.part.* -mtime -1 -exec sed -i 's/pre class="item_outdated.*$/pre class="item_ok">/g' {} \;
+        find ${cache_dir}/${hostname}.html.detail.part.* -mtime +1 -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
+        for file in  ${cache_dir}/${hostname}.html.detail.part.*; do
+            if [[ "$file" == *".part.${type}"* ]]; then
+                echo "skipping $file"
+                continue
+            fi
+            echo $file
+            echo $type
+            text="${text}\n$(cat ${file})"
+        done
     fi
 
-    if echo "$text" | grep -q "CRITICAL: "; then
-        worst_status="crit"
-    elif [ "$outdated" -eq "1" ]; then
+    if echo "$text" | egrep -q '<pre class="item_outdated">'; then
+        worst_status="outdated"
+    elif echo "$text" | grep -q "CRITICAL: "; then
         worst_status="crit"
     elif echo "$text" | grep -q "WARNING: "; then
         worst_status="warn"
@@ -131,8 +136,8 @@ get_worst_status() {
 update_cache() {
     worst_status="unknown"
     parse_report
-    get_worst_status
     report_items="$(echo "$report" | parse_report_items)"
+    get_worst_status
     overview_part="${cache_dir}/${hostname}.html.overview.part"
     detail_view_part="${cache_dir}/${hostname}.html.detail.part.${type}"
     [ -f "$overview_part" ] && rm $overview_part
@@ -159,6 +164,11 @@ render_cache() {
     html_head "overview" > $tmp_index_file
     for file in ${cache_dir}/*.overview.part; do
         if grep -q tile_crit $file; then
+            cat $file >> $tmp_index_file
+        fi
+    done
+    for file in ${cache_dir}/*.overview.part; do
+        if egrep -q 'tile_outdated|tile_warn' $file; then
             cat $file >> $tmp_index_file
         fi
     done

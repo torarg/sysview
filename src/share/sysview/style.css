@@ -65,6 +65,10 @@ main {
     background-color: lightgrey;
     color: black;
 }
+.item_outdated {
+    background-color: lightyellow;
+    color: black;
+}
 
 .tile_ok {
     flex: 1 0 300px;
@@ -85,6 +89,29 @@ main {
 .tile_crit {
     flex: 1 0 300px;
     background-color: #ffcccb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    margin: 10px;
+    padding: 1px;
+    width: 300px;
+    height: 100px;
+}
+
+.tile_warn {
+    flex: 1 0 300px;
+    background-color: lightyellow;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    margin: 10px;
+    padding: 1px;
+    width: 300px;
+    height: 100px;
+}
+.tile_outdated {
+    flex: 1 0 300px;
+    background-color: lightyellow;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     transition: transform 0.3s ease-in-out;
