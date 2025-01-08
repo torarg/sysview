@@ -47,15 +47,20 @@ parse_report_items() {
     item_count=0
     item_pointer=0
     while read line; do
+        if echo "$line" |egrep -q '^OK:|^CRITICAL:|^WARNING:|^UNKNOWN:'; then
+            item_status="$(echo $line | cut -f 1 -d ':' |  tr '[:upper:]' '[:lower:]')"
+        fi
         if [ "$line" == "---" ] && [ "$item_count" -eq "0" ]; then
             item_count=1
             item_pointer=1
-            items="${items}<pre>\n"
+            items="${items}<pre class=\"CSS_CLASS\">\n"
         elif [ "$line" == "---" ] && [ "$item_count" -gt "0" ]; then
             items="${items}</pre>"
             item_count="$((item_count + 1 ))"
+            items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
+            item_status=""
         elif [ "$item_count" -gt "0" ] && [ "$item_pointer" -ne "$item_count" ]; then
-            items="${items}<pre>\n${line}\n"
+            items="${items}<pre class=\"CSS_CLASS\">\n${line}\n"
             item_pointer="$((item_pointer + 1 ))"
         elif [ "$item_count" -gt "0" ]; then
             items="${items}${line}\n"
@@ -65,6 +70,7 @@ parse_report_items() {
         items="$(echo "$items" | sed '$ d')"
         items="$items\n</pre>"
     fi
+    items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
     echo "$items"
 }
 
@@ -119,8 +125,8 @@ get_worst_status() {
 update_cache() {
     worst_status="unknown"
     parse_report
-    report_items="$(echo "$report" | parse_report_items)"
     get_worst_status
+    report_items="$(echo "$report" | parse_report_items)"
     overview_part="${cache_dir}/${hostname}.html.overview.part"
     detail_view_part="${cache_dir}/${hostname}.html.detail.part.${type}"
     [ -f "$overview_part" ] && rm $overview_part
