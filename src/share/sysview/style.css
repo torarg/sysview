@@ -14,7 +14,6 @@ pre {
   display: inline-block;
   border-radius: 10px;
   transition: transform 0.3s ease-in-out;
-  flex: 1 0 300px;
   padding: 5px;
   margin: 10;
   text-align: left;
@@ -157,7 +156,6 @@ footer {
 
 	pre {
 		font-size: 3.5vw;
-        flex: 1 0 95%;
 	}
 
 	header {
