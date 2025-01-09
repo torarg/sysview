@@ -37,6 +37,12 @@ when the command's exit code is zero:
 reportify -s -t backup -c "/usr/local/bin/backup.sh" | ssh www sysview /var/www/htdocs/pub/sysview
 ```
 
+To delete a host it has to be removed from sysview's cache directory and then
+any following execution will remove it from the html root:
+```
+rm ~/.cache/sysview/HOSTNAME*
+```
+
 ## report format
 
 sysview expects a ``sysreport`` compliant report on STDIN.
