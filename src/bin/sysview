@@ -18,6 +18,7 @@ html_head() {
     <head>
         <title>$1</title>
         <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="favicon">
     </head>
     <body>
     <header>
