@@ -1,3 +1,6 @@
+# 0.0.14
+- improve outdated detection
+
 # 0.0.13
 - change theme color
 
