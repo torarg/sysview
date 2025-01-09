@@ -1,3 +1,6 @@
+# 0.0.13
+- change theme color
+
 # 0.0.12
 - add favicon
 - add manifest.json
