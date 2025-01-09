@@ -3,7 +3,6 @@
 usage="usage: sysview [-hV] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
-css_file="${config_dir}/style.css"
 
 version="0.0.1"
 
@@ -16,11 +15,14 @@ html_head() {
     echo "$(cat <<EOF
 <html>
     <head>
-        <title>$1</title>
+        <title>sysview: $1</title>
         <link rel="stylesheet" href="style.css">
-        <link rel="icon" href="favicon">
-        <link rel="icon" href="favicon">
-        <link rel="manifest" href="manifest.json" />
+        <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="sysview" />
+        <link rel="manifest" href="site.webmanifest" />
     </head>
     <body>
     <header>
@@ -169,7 +171,7 @@ render_cache() {
     tmp_detail_file="${cache_dir}/${hostname}.html"
 
     # render overview
-    html_head "overview" > $tmp_index_file
+    html_head "index" > $tmp_index_file
     for file in ${cache_dir}/*.overview.part; do
         if grep -q tile_crit $file; then
             cat $file >> $tmp_index_file
@@ -212,6 +214,6 @@ html_root="$1"
 [ -z "$html_root" ] && err_exit "no html root"
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
-cp $css_file $html_root/
+cp $config_dir/* $html_root/
 update_cache
 render_cache
