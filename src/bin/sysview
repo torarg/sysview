@@ -119,9 +119,10 @@ parse_report() {
 
 get_worst_status() {
     text="$report"
+    find ${cache_dir}/*.html.detail.part.* -mtime +1 -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
+    find ${cache_dir}/*.html.overview.part -mtime +1 -exec sed -i 's/div class="tile_.*$/div class="tile_outdated">/g' {} \;
     if stat -q ${cache_dir}/${hostname}.html.detail.part.* > /dev/null; then
         #find ${cache_dir}/${hostname}.html.detail.part.* -mtime -1 -exec sed -i 's/pre class="item_outdated.*$/pre class="item_ok">/g' {} \;
-        find ${cache_dir}/${hostname}.html.detail.part.* -mtime +1 -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
         for file in  ${cache_dir}/${hostname}.html.detail.part.*; do
             if [[ "$file" == *".part.${type}"* ]]; then
                 continue
