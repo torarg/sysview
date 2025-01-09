@@ -1,3 +1,7 @@
+# 0.0.12
+- add favicon
+- add manifest.json
+
 # 0.0.11
 - improve css
 
