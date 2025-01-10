@@ -1,3 +1,6 @@
+# 0.1.1
+- fix man page installation
+
 # 0.1.0
 - add man page
 - improve css

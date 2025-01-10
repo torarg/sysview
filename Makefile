@@ -13,7 +13,7 @@ all:
 clean:
 
 install:
-	install -m 0644 ./src/man/man1/$(NAME).1 /usr/local/man/man1
+	install -m 0644 ./src/man/man1/$(NAME).1 ${PREFIX}/man/man1
 	install -m 0755 -d $(CONFIG_PATH)
 	install -m 0755 ./src/bin/$(NAME) $(BIN_PATH)
 	cp -r ./src/share/$(NAME)/* $(CONFIG_PATH)/
