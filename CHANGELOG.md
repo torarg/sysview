@@ -1,6 +1,8 @@
+# 0.1.2
+- more css fixes for mobile view
+
 # 0.1.1
 - fix man page installation
-- more css fixes for mobile view
 
 # 0.1.0
 - add man page
