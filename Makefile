@@ -13,7 +13,7 @@ all:
 clean:
 
 install:
-	install -m 0644 ./src/man/man1/sysview.1 /usr/local/man/man1
+	install -m 0644 ./src/man/man1/$(NAME).1 /usr/local/man/man1
 	install -m 0755 -d $(CONFIG_PATH)
 	install -m 0755 ./src/bin/$(NAME) $(BIN_PATH)
 	cp -r ./src/share/$(NAME)/* $(CONFIG_PATH)/
@@ -21,7 +21,7 @@ install:
 	find $(CONFIG_PATH)/ -type d -exec chmod go+x {} \;
 
 uninstall:
-	rm -r $(CONFIG_PATH) $(BIN_PATH)
+	rm -fr $(CONFIG_PATH) $(BIN_PATH) /usr/local/man/man1/$(NAME).1
 
 clean-pkg:
 	rm -fr /usr/ports/pobj/$(NAME)-*
