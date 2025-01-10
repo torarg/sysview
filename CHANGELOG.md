@@ -1,3 +1,6 @@
+# 0.1.3
+- fix version option
+
 # 0.1.2
 - more css fixes for mobile view
 
