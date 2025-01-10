@@ -1,4 +1,5 @@
-# 0.0.14
+# 0.1.0
+- add man page
 - improve css
 - improve outdated detection
 
