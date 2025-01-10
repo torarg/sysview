@@ -4,7 +4,7 @@ usage="usage: sysview [-hV] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
 
-version="0.0.1"
+VERSION="0.0.1"
 
 err_exit() {
     echo "error: $@" 1>&2
