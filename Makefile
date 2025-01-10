@@ -8,8 +8,12 @@ OPENBSD_SIGNED_PKG_DIR =       /usr/ports/packages/amd64/all/signed
 OPENBSD_PKG_KEY                        =       ~/keys/signify/1wilson-pkg.sec
 OPENBSD_PKG_HOST               =       www
 
+all:
+
+clean:
 
 install:
+	install -m 0644 ./src/man/man1/sysview.1 /usr/local/man/man1
 	install -m 0755 -d $(CONFIG_PATH)
 	install -m 0755 ./src/bin/$(NAME) $(BIN_PATH)
 	cp -r ./src/share/$(NAME)/* $(CONFIG_PATH)/
@@ -18,10 +22,6 @@ install:
 
 uninstall:
 	rm -r $(CONFIG_PATH) $(BIN_PATH)
-
-all:
-
-clean:
 
 clean-pkg:
 	rm -fr /usr/ports/pobj/$(NAME)-*

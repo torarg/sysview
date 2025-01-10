@@ -1,0 +1,54 @@
+.Dd $Mdocdate$
+.Dt SYSVIEW 1
+.Os
+.Sh NAME
+.Nm sysview
+.Nd static html monitoring dashboard
+.Sh SYNOPSIS
+.Nm sysview
+.Op Fl dhV
+.Ar directory
+.Sh DESCRIPTION
+.Nm
+generates static html monitoring dashboards
+from
+.Xr sysreport 1
+compliant reports received on stdin.
+The generated files are written to a given web root
+.Ar directory .
+The options are as follows: 
+.Bl -tag -width Ds
+.It Fl h
+Print usage.
+.It Fl V
+Print version.
+.It Fl d Ar days
+.Nm 
+uses 
+.Ar days
+to check if hosts or report items are outdated. If any cached
+status is older than
+.Ar days
+it is displayed as outdated. Default is 1.
+
+.Sh EXAMPLES
+Add or update a host's
+.Xr sysreport 1
+on a remote
+web server's sysview dashboard:
+.Bd -literal -offset indent
+$ sysreport | ssh www sysview /var/www/htdocs/sysview
+.Ed
+.Pp
+
+
+Delete host from cache:
+.Bd -literal -offset indent
+$ rm ~/.cache/sysview/HOSTNAME*
+.Ed
+.Pp
+
+.Sh SEE ALSO
+.Xr sysreport 1
+.Sh AUTHORS
+.An Michael Wilson Aq Mt mw@1wilson.org
