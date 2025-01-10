@@ -22,6 +22,7 @@ html_head() {
         <link rel="shortcut icon" href="favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-title" content="sysview" />
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
         <link rel="manifest" href="site.webmanifest" />
     </head>
     <body>

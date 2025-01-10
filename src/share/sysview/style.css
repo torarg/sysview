@@ -141,7 +141,7 @@ footer {
     color: #fff;
     text-align: center;
     padding: 10px;
-  position: fixed;
+  position: auto;
   bottom: 0;
   width: 100%;
 }
@@ -174,28 +174,3 @@ footer {
 }
 
 
-@media only screen
-  and (min-device-width: 320px)
-  and (max-device-width: 480px
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: portrait) {
-	main {
-		font-size: 3.5vw;
-	}
-
-	pre {
-		font-size: 3.5vw;
-	        max-width: 100%;
-		margin-bottom: 3%;
-	}
-
-	header {
-		font-size: 3.5vw;
-	}
-
-	[class*="tile_"] {
-		width: 70vw;
-		height: 13vw;
-		margin-bottom: 3%;
-	}
-}
