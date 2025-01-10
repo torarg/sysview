@@ -1,7 +1,9 @@
 NAME                                   =       sysview
 PREFIX                                 ?=      /usr/local
 CONFIG_PATH                            =       ${PREFIX}/share/$(NAME)
-BIN_PATH                               =       ${PREFIX}/bin/$(NAME)
+BIN_PATH                               =       ${PREFIX}/bin
+MAN_SECTION                            =       1
+MAN_PATH                               =       ${PREFIX}/man/man$(MAN_SECTION)
 OPENBSD_PORTS_DIR              =       /usr/ports/sysutils/$(NAME)
 OPENBSD_PKG_DIR                        =       /usr/ports/packages/amd64/all
 OPENBSD_SIGNED_PKG_DIR =       /usr/ports/packages/amd64/all/signed
@@ -13,15 +15,21 @@ all:
 clean:
 
 install:
-	install -m 0644 ./src/man/man1/$(NAME).1 ${PREFIX}/man/man1
+	install -m 0644 ./src/man/man1/* $(MAN_PATH)/
 	install -m 0755 -d $(CONFIG_PATH)
-	install -m 0755 ./src/bin/$(NAME) $(BIN_PATH)
+	install -m 0755 ./src/bin/* $(BIN_PATH)/
 	cp -r ./src/share/$(NAME)/* $(CONFIG_PATH)/
 	chmod -R go+r $(CONFIG_PATH)/
 	find $(CONFIG_PATH)/ -type d -exec chmod go+x {} \;
 
 uninstall:
-	rm -fr $(CONFIG_PATH) $(BIN_PATH) /usr/local/man/man1/$(NAME).1
+	for progname in $$(ls ./src/bin); do \
+		echo "rm -fr $(BIN_PATH)/$$progname" ; \
+		rm -fr $(BIN_PATH)/$$progname ; \
+		echo "rm -fr $(MAN_PATH)/$$progname.1" ; \
+		rm -fr $(MAN_PATH)/$$progname.1 ; \
+	done
+	rm -fr $(CONFIG_PATH)
 
 clean-pkg:
 	rm -fr /usr/ports/pobj/$(NAME)-*
