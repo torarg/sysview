@@ -207,7 +207,7 @@ outdated_after=1
 while getopts :hVd: flag; do
     case "${flag}" in
         h) echo "$usage" && exit 0 ;;
-        V) echo "$version" && exit 0 ;;
+        V) echo "$VERSION" && exit 0 ;;
         d) outdated_after="$OPTARG" ;;
         ?) err_exit "invalid args" ;;
     esac
