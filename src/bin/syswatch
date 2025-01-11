@@ -1,0 +1,36 @@
+#!/bin/sh
+
+
+usage="syswatch [-hV] -f FIFO_PATH"
+VERSION="0.0.1"
+
+cache_dir="${HOME}/.cache/sysview"
+
+update_sysview() {
+    report_file="$(echo "$1" | cut  -f 2 -d ' ')"
+    web_root="$(echo "$1" | cut  -f 3 -d ' ')"
+    [ -n "$report_file" ] || [ -n "$web_root ]" || return 1
+    cat $report_file | sysview $web_root
+    rm $report_file
+}
+
+while getopts hVf: flag; do
+    case "$flag" in
+        h) echo "$usage"; exit 0 ;;
+        V) echo "$VERSION"; exit 0 ;;
+        f) fifo_path="$OPTARG" ;;
+        ?) echo "error: invalid arg" 1>&2; exit 1 ;;
+    esac
+done
+
+[ -z "$fifo_path" ] && echo 1>&2 "error: missing argument" && exit 1
+[ -p "$fifo_path" ] || mkfifo $fifo_path || exit 1
+
+while read command < $fifo_path; do
+    echo $command
+    action="$(echo "$command" | cut -f 1 -d ' ')"
+    case "$action" in
+        U) update_sysview "$command" ;;
+        R) delete_host "$command" ;;
+    esac
+done
