@@ -1,10 +1,11 @@
 #!/bin/sh
 
 
-usage="syswatch [-hV] -f FIFO_PATH"
+usage="syswatch [-hV] [-f FIFO_PATH]"
 VERSION="0.0.1"
 
 cache_dir="${HOME}/.cache/sysview"
+default_fifo="${cache_dir}/syswatch.fifo"
 
 update_sysview() {
     report_file="$(echo "$1" | cut  -f 2 -d ' ')"
@@ -23,7 +24,7 @@ while getopts hVf: flag; do
     esac
 done
 
-[ -z "$fifo_path" ] && echo 1>&2 "error: missing argument" && exit 1
+[ -z "$fifo_path" ] && fifo_path="$default_fifo"
 [ -p "$fifo_path" ] || mkfifo $fifo_path || exit 1
 
 while read command < $fifo_path; do

@@ -16,8 +16,14 @@ while getopts hVf:w: flag; do
     esac
 done
 
-[ -z "$web_root" ] && echo 1>&2 "error: missing argument" && exit 1
-[ -z "$fifo_path" ] && echo 1>&2 "error: missing argument" && exit 1
+if pgrep -q -f syswatch; then
+    echo "error: syswatch not running"
+    exit 1
+fi
+[ -z "$web_root" ] && echo "error: missing argument" 1>&2 ; exit 1
+echo "hi"
+[ -z "$fifo_path" ] && echo  "error: missing argument" 1>&2 ; exit 1
+echo "hi"
 [ -p "$fifo_path" ] || mkfifo $fifo_path || exit 1
 
 while read line; do
