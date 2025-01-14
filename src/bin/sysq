@@ -16,15 +16,13 @@ while getopts hVf:w: flag; do
     esac
 done
 
-if pgrep -q -f syswatch; then
-    echo "error: syswatch not running"
+if ! pgrep -q -f syswatch; then
+    echo "error: syswatch not running" 1>&2
     exit 1
 fi
-[ -z "$web_root" ] && echo "error: missing argument" 1>&2 ; exit 1
-echo "hi"
-[ -z "$fifo_path" ] && echo  "error: missing argument" 1>&2 ; exit 1
-echo "hi"
-[ -p "$fifo_path" ] || mkfifo $fifo_path || exit 1
+[ -z "$web_root" ] && echo "error: missing argument" 1>&2 && exit 1
+[ -z "$fifo_path" ] && echo  "error: missing argument" 1>&2 && exit 1
+[ ! -p "$fifo_path" ] && echo  "error: $fifo_path is not a FIFO" 1>&2 && exit 1
 
 while read line; do
     report="${report}${line}\n"

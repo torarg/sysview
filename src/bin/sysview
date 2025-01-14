@@ -3,7 +3,7 @@
 usage="usage: sysview [-hV] [-d DAYS] [-f FIFO] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
-default_fifo="${cache_dir}/syswatch.fifo"
+default_fifo="$HOME/syswatch.fifo"
 
 VERSION=0.1.2
 

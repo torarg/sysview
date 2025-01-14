@@ -17,6 +17,7 @@ clean:
 
 install:
 	install -m 0644 ./src/man/man1/* $(MAN_PATH)/
+	install -m 0555 ./src/etc/rc.d/* /etc/rc.d/
 	install -m 0755 -d $(CONFIG_PATH)
 	install -m 0755 ./src/bin/* $(BIN_PATH)/
 	cp -r ./src/share/$(NAME)/* $(CONFIG_PATH)/
@@ -30,6 +31,7 @@ uninstall:
 		echo "rm -fr $(MAN_PATH)/$$progname.1" ; \
 		rm -fr $(MAN_PATH)/$$progname.1 ; \
 	done
+	rm -fr /etc/rc.d/syswatch
 	rm -fr $(CONFIG_PATH)
 
 clean-pkg:
