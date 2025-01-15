@@ -1,3 +1,7 @@
+# 0.2.0
+- add fifo processor for sysview (syswatch)
+- add fifo controller for sysview (sysq)
+
 # 0.1.3
 - fix version option
 

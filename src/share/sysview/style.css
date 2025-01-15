@@ -59,26 +59,31 @@ main {
 .item_ok {
     background-color: lightgreen;
     color: black;
+    max-height: 300px;
 }
 
 .item_warning {
     background-color: moccasin;
     color: black;
+    max-height: 300px;
 }
 
 .item_critical {
     background-color: salmon;
     color: black;
+    max-height: 300px;
 }
 
 .item_unknown {
     background-color: plum;
     color: black;
+    max-height: 300px;
 }
 
 .item_outdated {
     background-color: lightcyan;
     color: black;
+    max-height: 300px;
 }
 
 .tile_ok {
