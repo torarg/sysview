@@ -3,22 +3,8 @@
 usage="usage: sysview [-hV] [-d DAYS] [-f FIFO] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
-default_fifo="$HOME/syswatch.fifo"
 
 VERSION=0.1.2
-
-err_exit() {
-    echo "error: $@" 1>&2
-    exit 1
-}
-
-add_report_to_queue() {
-    [ -p $fifo ] || err_exit "invalid fifo"
-    while read line; do
-        report="${report}${line}\n"
-    done
-    echo "$report" | sysq -f $fifo -w $html_root || return 1
-}
 
 html_head() {
     echo "$(cat <<EOF
@@ -215,15 +201,11 @@ render_cache() {
 }
 
 outdated_after=1
-queue_enabled=0
-fifo="$default_fifo"
-while getopts :hVd:f:q flag; do
+while getopts :hVd: flag; do
     case "${flag}" in
         h) echo "$usage" && exit 0 ;;
         V) echo "$VERSION" && exit 0 ;;
         d) outdated_after="$OPTARG" ;;
-        f) fifo="$OPTARG" ;;
-        q) queue_enabled=1 ;;
         ?) err_exit "invalid args" ;;
     esac
 done
@@ -231,14 +213,6 @@ shift $(($OPTIND - 1))
 
 html_root="$1"
 [ -z "$html_root" ] && err_exit "no html root"
-
-if [ -n "$fifo" ] && [ "$queue_enabled" -eq "1" ]; then
-    echo "adding report to queue"
-    add_report_to_queue && exit 0 || exit 1
-    echo "done"
-fi
-
-echo "no queue"
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
 cp $config_dir/* $html_root/
