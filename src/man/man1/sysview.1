@@ -17,6 +17,10 @@ compliant reports received on stdin.
 The generated files are written to a given web root
 .Ar directory .
 .Pp
+To avoid potentially harmful parallel execution
+.Nm
+uses flock to manage per target directory lock files.
+.Pp
 The options are as follows: 
 .Bl -tag -width Ds
 .It Fl h
@@ -31,7 +35,12 @@ to check if hosts or report items are outdated. If any cached
 status is older than
 .Ar days
 it is displayed as outdated. Default is 1.
-
+.El
+.Sh FILES
+.Bl -tag -width Ds
+.It Pa $HOME/.cache/sysview
+Local cache directory containing host data and lock files.
+.El
 .Sh EXAMPLES
 Add or update a host's
 .Xr sysreport 1
