@@ -9,10 +9,10 @@ index page.
 
 ## screenshots
 ### index view
-![index view](screenshots/index.png)
+![index view](screenshots/index_view.png)
 
 ### detail view
-![detail view](screenshots/detail.png)
+![detail view](screenshots/detail_view.png)
 
 ## requirements
 - POSIX compliant shell
