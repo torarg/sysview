@@ -1,6 +1,6 @@
 #!/bin/sh
 
-usage="usage: sysview [-hV] [-d DAYS] HTML_ROOT"
+usage="usage: sysview [-huVr] [-d DAYS] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
 
@@ -50,6 +50,12 @@ html_foot() {
 </html>
 EOF
 )"
+}
+
+update_outdated() {
+    find ${cache_dir}/ -name "*.html" -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
+    find ${cache_dir}/ -name "*.html.detail.part.*" -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
+    find ${cache_dir}/ -name "*.html.overview.part" -mtime +${outdated_after} -exec sed -i 's/div class="tile_.*$/div class="tile_outdated">/g' {} \;
 }
 
 
@@ -117,9 +123,6 @@ parse_report() {
 
 get_worst_status() {
     text="$report"
-    find ${cache_dir}/ -name "*.html" -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
-    find ${cache_dir}/ -name "*.html.detail.part.*" -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
-    find ${cache_dir}/ -name "*.html.overview.part" -mtime +${outdated_after} -exec sed -i 's/div class="tile_.*$/div class="tile_outdated">/g' {} \;
     if stat -q ${cache_dir}/${hostname}.html.detail.part.* > /dev/null; then
         #find ${cache_dir}/${hostname}.html.detail.part.* -mtime -1 -exec sed -i 's/pre class="item_outdated.*$/pre class="item_ok">/g' {} \;
         for file in  ${cache_dir}/${hostname}.html.detail.part.*; do
@@ -143,7 +146,7 @@ get_worst_status() {
     fi
 }
 
-update_cache() {
+process_report() {
     worst_status="unknown"
     parse_report
     report_items="$(echo "$report" | parse_report_items)"
@@ -166,9 +169,8 @@ EOF
 
 }
 
-render_cache() {
+update_index_cache() {
     tmp_index_file="${cache_dir}/index.html"
-    tmp_detail_file="${cache_dir}/${hostname}.html"
 
     # render overview
     html_head "index" > $tmp_index_file
@@ -188,26 +190,28 @@ render_cache() {
         fi
     done
     html_foot >> $tmp_index_file
-    cp $tmp_index_file $html_root/index.html
+}
 
-
+update_host_cache() {
+    tmp_detail_file="${cache_dir}/${hostname}.html"
     # render detail views
     html_head "$hostname" > $tmp_detail_file
     for file in ${cache_dir}/${hostname}.html.detail.part.*; do
         cat $file >> $tmp_detail_file
     done
     html_foot >> $tmp_detail_file
-    cp ${cache_dir}/*.html $html_root/
 }
 
 
 outdated_after=1
-while getopts :hVd: flag; do
+read_report="no"
+while getopts :hVrd: flag; do
     case "${flag}" in
         h) echo "$usage" && exit 0 ;;
+        r) read_report="yes" ;;
         V) echo "$VERSION" && exit 0 ;;
         d) outdated_after="$OPTARG" ;;
-        ?) echo "invalid args" >&2 && exit 1 ;;
+        ?) echo "error: invalid args\n$usage" >&2 && exit 1 ;;
     esac
 done
 shift $(($OPTIND - 1))
@@ -216,7 +220,7 @@ html_root="${1%/}"
 html_root_name="$(echo $html_root | sed 's|/|_|g')"
 cache_dir="${cache_dir}/${html_root_name}"
 
-[ -z "$html_root" ] && echo "no html root" >&2 && exit 1
+[ -z "$html_root" ] && echo "error: no html root\n$usage" >&2 && exit 1
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
 lock_file="${cache_dir}/.lock"
@@ -225,7 +229,12 @@ lock_file="${cache_dir}/.lock"
 
 flock -e 3
 cp $config_dir/* $html_root/
-update_cache
-render_cache
+update_outdated
+if [ "$read_report" == "yes" ]; then
+    process_report
+    update_host_cache
+fi
+update_index_cache
+cp ${cache_dir}/*.html $html_root/
 
 )3>$lock_file
