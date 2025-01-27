@@ -6,7 +6,7 @@
 .Nd static html monitoring dashboard
 .Sh SYNOPSIS
 .Nm sysview
-.Op Fl dhV
+.Op Fl dhuV
 .Ar directory
 .Sh DESCRIPTION
 .Nm
@@ -23,12 +23,6 @@ uses flock to manage per target directory lock files.
 .Pp
 The options are as follows: 
 .Bl -tag -width Ds
-.It Fl h
-Print usage.
-.It Fl r
-Read report from stdin.
-.It Fl V
-Print version.
 .It Fl d Ar days
 .Nm 
 uses 
@@ -37,6 +31,12 @@ to check if hosts or report items are outdated. If any cached
 status is older than
 .Ar days
 it is displayed as outdated. Default is 1.
+.It Fl h
+Print usage.
+.It Fl u
+Updates dashboard from cache without reading from stdin.
+.It Fl V
+Print version.
 .El
 .Sh FILES
 .Bl -tag -width Ds
@@ -49,14 +49,14 @@ Add or update a host's
 on a remote
 web server's sysview dashboard:
 .Bd -literal -offset indent
-$ sysreport | ssh www sysview -r /var/www/htdocs/sysview
+$ sysreport | ssh www sysview /var/www/htdocs/sysview
 .Ed
 .Pp
 Delete host "www" from cache and update dashboard in
-/var/www/pub:
+.Pa /var/www/htdocs/sysview :
 .Bd -literal -offset indent
 $ rm $HOME/.cache/sysview/_var_www_htdocs_sysview/www*
-$ sysview /var/www/htdocs/sysview
+$ sysview -u /var/www/htdocs/sysview
 .Ed
 .Pp
 .Sh SEE ALSO
