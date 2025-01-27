@@ -1,11 +1,9 @@
 # sysview
 
-sysview generates a simple monitoring dashboard from
-[sysreport](https://github.com/torarg/sysreport) compliant reports.
-
-Reports are received via STDIN and sysview then creates or updates the detail
-view for the host specified in the received report and also updates the
-index page.
+sysview generates static html monitoring dashboards from
+[sysreport](https://github.com/torarg/sysreport)
+compliant reports received on stdin.
+The generated files are written to a given output directory.
 
 ## screenshots
 ### index view
