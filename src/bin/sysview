@@ -212,12 +212,14 @@ while getopts :hVd: flag; do
 done
 shift $(($OPTIND - 1))
 
-html_root="$1"
+html_root="${1%/}"
+html_root_name="$(echo $html_root | sed 's|/|_|g')"
+cache_dir="${cache_dir}/${html_root_name}"
+
 [ -z "$html_root" ] && echo "no html root" >&2 && exit 1
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
-lock_file_name=".lock$(echo $html_root | sed 's|/|_|g')"
-lock_file="${cache_dir}/${lock_file_name}"
+lock_file="${cache_dir}/.lock"
 
 (
 
