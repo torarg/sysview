@@ -1,6 +1,6 @@
 #!/bin/sh
 
-usage="usage: sysview [-huVr] [-d DAYS] HTML_ROOT"
+usage="usage: sysview [-huV] [-d DAYS] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
 
@@ -204,11 +204,11 @@ update_host_cache() {
 
 
 outdated_after=1
-read_report="no"
-while getopts :hVrd: flag; do
+read_report="yes"
+while getopts :huVd: flag; do
     case "${flag}" in
         h) echo "$usage" && exit 0 ;;
-        r) read_report="yes" ;;
+        u) read_report="no" ;;
         V) echo "$VERSION" && exit 0 ;;
         d) outdated_after="$OPTARG" ;;
         ?) echo "error: invalid args\n$usage" >&2 && exit 1 ;;
