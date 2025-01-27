@@ -200,21 +200,30 @@ render_cache() {
     cp ${cache_dir}/*.html $html_root/
 }
 
+
 outdated_after=1
 while getopts :hVd: flag; do
     case "${flag}" in
         h) echo "$usage" && exit 0 ;;
         V) echo "$VERSION" && exit 0 ;;
         d) outdated_after="$OPTARG" ;;
-        ?) err_exit "invalid args" ;;
+        ?) echo "invalid args" >&2 && exit 1 ;;
     esac
 done
 shift $(($OPTIND - 1))
 
 html_root="$1"
-[ -z "$html_root" ] && err_exit "no html root"
+[ -z "$html_root" ] && echo "no html root" >&2 && exit 1
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
+lock_file_name=".lock_$(echo $html_root | sed 's|/|_|g')"
+lock_file="${cache_dir}/${lock_file_name}"
+
+(
+
+flock -e 3
 cp $config_dir/* $html_root/
 update_cache
 render_cache
+
+)3>$lock_file
