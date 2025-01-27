@@ -117,9 +117,9 @@ parse_report() {
 
 get_worst_status() {
     text="$report"
-    find ${cache_dir}/*.html -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
-    find ${cache_dir}/*.html.detail.part.* -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
-    find ${cache_dir}/*.html.overview.part -mtime +${outdated_after} -exec sed -i 's/div class="tile_.*$/div class="tile_outdated">/g' {} \;
+    find ${cache_dir}/ -name "*.html" -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
+    find ${cache_dir}/ -name "*.html.detail.part.*" -mtime +${outdated_after} -exec sed -i 's/pre class="item_.*$/pre class="item_outdated">/g' {} \;
+    find ${cache_dir}/ -name "*.html.overview.part" -mtime +${outdated_after} -exec sed -i 's/div class="tile_.*$/div class="tile_outdated">/g' {} \;
     if stat -q ${cache_dir}/${hostname}.html.detail.part.* > /dev/null; then
         #find ${cache_dir}/${hostname}.html.detail.part.* -mtime -1 -exec sed -i 's/pre class="item_outdated.*$/pre class="item_ok">/g' {} \;
         for file in  ${cache_dir}/${hostname}.html.detail.part.*; do
@@ -216,7 +216,7 @@ html_root="$1"
 [ -z "$html_root" ] && echo "no html root" >&2 && exit 1
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
-lock_file_name=".lock_$(echo $html_root | sed 's|/|_|g')"
+lock_file_name=".lock$(echo $html_root | sed 's|/|_|g')"
 lock_file="${cache_dir}/${lock_file_name}"
 
 (
