@@ -12,4 +12,6 @@ PERMIT_PACKAGE	=	Yes
 SITES			=	https://github.com/torarg/sysview/archive/refs/tags/
 DISTFILES		=	sysreport-{}${V}${EXTRACT_SUFX}
 
+RUN_DEPENDS		=	sysutils/flock
+
 .include <bsd.port.mk>
