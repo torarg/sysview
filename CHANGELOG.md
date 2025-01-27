@@ -1,6 +1,8 @@
 # 0.2.0
 - add ``-u`` flag for update-only mode
 - add ``flock`` based locking mechanism
+- cap max item height in detail view to 300px
+- add auto refresh meta tag
 
 # 0.1.3
 - fix version option
