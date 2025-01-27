@@ -3,6 +3,7 @@
 sysview generates static html monitoring dashboards from
 [sysreport](https://github.com/torarg/sysreport)
 compliant reports received on stdin.
+
 The generated files are written to a given output directory.
 
 ## screenshots
