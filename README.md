@@ -7,6 +7,9 @@ Reports are received via STDIN and sysview then creates or updates the detail
 view for the host specified in the received report and also updates the
 index page.
 
+![index view](screenshots/index.png)
+![detail view](screenshots/detail.png)
+
 ## requirements
 - POSIX compliant shell
 - tested only with OpenBSD userland tools (date, find, sed, ...)
