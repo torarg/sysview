@@ -14,10 +14,10 @@ generates static html monitoring dashboards
 from
 .Xr sysreport 1
 compliant reports received on stdin.
-The generated files are written to a given web root
+The generated files are written to a given output
 .Ar directory .
 .Pp
-To avoid potentially harmful parallel execution
+To avoid potentially harmful parallel execution,
 .Nm
 uses flock to manage per target directory lock files.
 .Pp
@@ -25,6 +25,8 @@ The options are as follows:
 .Bl -tag -width Ds
 .It Fl h
 Print usage.
+.It Fl r
+Read report from stdin.
 .It Fl V
 Print version.
 .It Fl d Ar days
@@ -47,7 +49,14 @@ Add or update a host's
 on a remote
 web server's sysview dashboard:
 .Bd -literal -offset indent
-$ sysreport | ssh www sysview /var/www/htdocs/sysview
+$ sysreport | ssh www sysview -r /var/www/htdocs/sysview
+.Ed
+.Pp
+Delete host "www" from cache and update dashboard in
+/var/www/pub:
+.Bd -literal -offset indent
+$ rm $HOME/.cache/sysview/_var_www_htdocs_sysview/www*
+$ sysview /var/www/htdocs/sysview
 .Ed
 .Pp
 .Sh SEE ALSO
