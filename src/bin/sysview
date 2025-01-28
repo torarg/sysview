@@ -217,7 +217,7 @@ done
 shift $(($OPTIND - 1))
 
 html_root="${1%/}"
-html_root_name="$(echo $html_root | sed 's|/|_|g')"
+html_root_name="$(realpath $html_root | sed 's|/|_|g')"
 cache_dir="${cache_dir}/${html_root_name}"
 
 [ -z "$html_root" ] && echo "error: no html root\n$usage" >&2 && exit 1
