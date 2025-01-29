@@ -1,3 +1,6 @@
+STATUSES="critical warning outdated unknown ok"
+STATUSES_FOOTER="ok warning critical outdated unknown"
+
 html_head() {
     echo "$(cat <<EOF
 <!DOCTYPE html>
@@ -32,11 +35,15 @@ html_foot() {
     </main>
     <footer>
     <div>
-        <pre id="legend" class="item_ok">OK</pre>
-        <pre id="legend" class="item_warning">Warning</pre>
-        <pre id="legend" class="item_critical">Critical</pre>
-        <pre id="legend" class="item_unknown">Unknown</pre>
-        <pre id="legend" class="item_outdated">Outdated</pre>
+EOF
+)"
+
+    # slightly modified order for footer
+    for status in $STATUSES_FOOTER; do
+        echo "<a href=${status}.html><pre id='legend' class='item_${status}'>${status}</pre></a>"
+    done
+
+    echo "$(cat <<EOF
     </div>
     </body>
 </html>
@@ -128,9 +135,9 @@ get_worst_status() {
     if echo "$text" | egrep -q '<pre class="item_outdated">'; then
         worst_status="outdated"
     elif echo "$text" | grep -q "CRITICAL: "; then
-        worst_status="crit"
+        worst_status="critical"
     elif echo "$text" | grep -q "WARNING: "; then
-        worst_status="warn"
+        worst_status="warning"
     elif echo "$text" | grep -q "OK: "; then
         worst_status="ok"
     else
@@ -166,20 +173,12 @@ update_index_cache() {
 
     # render overview
     html_head "index" > $tmp_index_file
-    for file in ${cache_dir}/*.overview.part; do
-        if grep -q tile_crit $file; then
-            cat $file >> $tmp_index_file
-        fi
-    done
-    for file in ${cache_dir}/*.overview.part; do
-        if egrep -q 'tile_outdated|tile_warn' $file; then
-            cat $file >> $tmp_index_file
-        fi
-    done
-    for file in ${cache_dir}/*.overview.part; do
-        if grep -q tile_ok $file; then
-            cat $file >> $tmp_index_file
-        fi
+    for status in $STATUSES; do
+        for file in ${cache_dir}/*.overview.part; do
+            if grep -q "tile_${status}" $file; then
+                cat $file >> $tmp_index_file
+            fi
+        done
     done
     html_foot >> $tmp_index_file
 }
@@ -188,8 +187,25 @@ update_host_cache() {
     tmp_detail_file="${cache_dir}/${hostname}.html"
     # render detail views
     html_head "$hostname" > $tmp_detail_file
-    for file in ${cache_dir}/${hostname}.html.detail.part.*; do
-        cat $file >> $tmp_detail_file
+    for status in $STATUSES; do
+        for file in ${cache_dir}/${hostname}.html.detail.part.*; do
+            grep -q "<pre class=\"item_$status\">" $file && cat $file >> $tmp_detail_file
+            echo "writing $status to $hostname"
+        done
     done
     html_foot >> $tmp_detail_file
+}
+
+update_by_status_cache() {
+    # render "filtered by status" pages
+    for status in $STATUSES; do
+        file="${cache_dir}/${status}.html"
+        html_head "$status" > $file
+        for overview_part in ${cache_dir}/*.overview.part; do
+            if grep -q "tile_${status}" $overview_part; then
+                cat $overview_part >> $file
+            fi
+        done
+        html_foot >> $file
+    done
 }

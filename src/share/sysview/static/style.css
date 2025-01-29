@@ -97,7 +97,7 @@ main {
     height: 100px;
 }
 
-.tile_crit {
+.tile_critical {
     flex: 1 0 300px;
     background-color: salmon;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -109,7 +109,7 @@ main {
     height: 100px;
 }
 
-.tile_warn {
+.tile_warning {
     flex: 1 0 300px;
     background-color: moccasin;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
