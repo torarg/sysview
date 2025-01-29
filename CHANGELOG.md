@@ -1,4 +1,5 @@
 # 0.2.1
+- replace status legend with menu
 - use absolute output dir path for generating cache dir name
 - remove margin between main and footer
 - move functions to seperate file

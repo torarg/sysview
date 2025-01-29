@@ -6,22 +6,6 @@ a {
   color: #333;
 }
 
-pre {
-  background-color: black;
-  color: white;
-  font-size: medium ; 
-  font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-  width: 100%;
-  max-width: 50vw;
-  display: inline-block;
-  border-radius: 10px;
-  transition: transform 0.3s ease-in-out;
-  padding: 5px;
-  margin: 10;
-  text-align: left;
-  overflow-x:auto;
-}
-
 body {
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     margin: 0;
@@ -47,6 +31,30 @@ main {
     margin: 10px auto;
     text-align: center;
     align: center;
+}
+
+pre {
+    background-color: black;
+    color: white;
+    font-size: medium;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    width: 100%;
+    max-width: 50vw;
+    display: inline-block;
+    overflow-x:auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    padding: 5px;
+    margin: 10;
+    text-align: left;
+}
+
+
+.menu {
+    align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .tiles-container {

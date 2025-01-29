@@ -39,7 +39,7 @@ lock_file="${cache_dir}/.lock"
         update_host_cache
     fi
     update_index_cache
-    update_by_status_cache
+    update_status_cache
     cp ${cache_dir}/*.html $html_root/
 
 )3>$lock_file

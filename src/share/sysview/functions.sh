@@ -23,28 +23,37 @@ html_head() {
         <div>:</div>
         <div>$1</div>
     </header>
+    <div class="menu">
+EOF
+)"
+    # slightly modified order for footer
+    for _status in $STATUSES_FOOTER; do
+        echo "<a href=${_status}.html><p id='legend' class='item_${_status}'>${_status}</p></a>"
+    done
+    echo "    </div>"
+}
+
+html_main_start() {
+    echo "$(cat <<EOF
     <main>
     <section class="tiles-container">
 EOF
 )"
 }
 
-html_foot() {
+html_main_end() {
     echo "$(cat <<EOF
     </section>
     </main>
-    <footer>
-    <div>
 EOF
 )"
+}
 
-    # slightly modified order for footer
-    for status in $STATUSES_FOOTER; do
-        echo "<a href=${status}.html><pre id='legend' class='item_${status}'>${status}</pre></a>"
-    done
-
+html_foot() {
     echo "$(cat <<EOF
-    </div>
+    <footer>
+    <div><p>version: $VERSION</p></div>
+    </footer>
     </body>
 </html>
 EOF
@@ -173,6 +182,7 @@ update_index_cache() {
 
     # render overview
     html_head "index" > $tmp_index_file
+    html_main_start >> $tmp_index_file
     for status in $STATUSES; do
         for file in ${cache_dir}/*.overview.part; do
             if grep -q "tile_${status}" $file; then
@@ -180,6 +190,7 @@ update_index_cache() {
             fi
         done
     done
+    html_main_end >> $tmp_index_file
     html_foot >> $tmp_index_file
 }
 
@@ -187,25 +198,28 @@ update_host_cache() {
     tmp_detail_file="${cache_dir}/${hostname}.html"
     # render detail views
     html_head "$hostname" > $tmp_detail_file
+    html_main_start >> $tmp_detail_file
     for status in $STATUSES; do
         for file in ${cache_dir}/${hostname}.html.detail.part.*; do
             grep -q "<pre class=\"item_$status\">" $file && cat $file >> $tmp_detail_file
-            echo "writing $status to $hostname"
         done
     done
+    html_main_end >> $tmp_detail_file
     html_foot >> $tmp_detail_file
 }
 
-update_by_status_cache() {
+update_status_cache() {
     # render "filtered by status" pages
     for status in $STATUSES; do
         file="${cache_dir}/${status}.html"
         html_head "$status" > $file
+        html_main_start >> $file
         for overview_part in ${cache_dir}/*.overview.part; do
             if grep -q "tile_${status}" $overview_part; then
                 cat $overview_part >> $file
             fi
         done
+        html_main_end >> $file
         html_foot >> $file
     done
 }
