@@ -6,7 +6,7 @@ usage="usage: sysview [-huV] [-d DAYS] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
 config_dir="/usr/local/share/sysview"
 
-. $config_dir/sysview.subr
+. $config_dir/functions.sh
 
 outdated_after=1
 read_report="yes"
