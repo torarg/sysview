@@ -1,4 +1,5 @@
 # 0.2.1
+- add "filter by status" views
 - replace status legend with menu
 - use absolute output dir path for generating cache dir name
 - remove margin between main and footer
