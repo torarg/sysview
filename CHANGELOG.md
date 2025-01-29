@@ -1,3 +1,6 @@
+# 0.2.1
+- use absolute output dir path for generating cache dir name
+
 # 0.2.0
 - add ``-u`` flag for update-only mode
 - add ``flock`` based locking mechanism
