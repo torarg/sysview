@@ -1,5 +1,7 @@
 # 0.2.1
 - use absolute output dir path for generating cache dir name
+- remove margin between main and footer
+- move functions to seperate file
 
 # 0.2.0
 - add ``-u`` flag for update-only mode
