@@ -70,22 +70,29 @@ update_outdated() {
 parse_report_items() {
     item_count=0
     item_pointer=0
+    item_title="no"
     while read line; do
         if echo "$line" |egrep -q '^OK:|^CRITICAL:|^WARNING:|^UNKNOWN:'; then
             item_status="$(echo $line | cut -f 1 -d ':' |  tr '[:upper:]' '[:lower:]')"
-            items="${items}$(echo "Last seen: $date")\n"
+            items="${items}$(echo "Date: $date")\n--\n"
         fi
-        if [ "$line" == "---" ] && [ "$item_count" -eq "0" ]; then
+        if [ "$item_title" == "yes" ]; then
+            items="${items}<b>${line}</b>\n"
+            item_title="no"
+            continue
+        elif [ "$line" == "---" ] && [ "$item_count" -eq "0" ]; then
             item_count=1
             item_pointer=1
             items="${items}<pre class=\"CSS_CLASS\">\n"
+            item_title="yes"
         elif [ "$line" == "---" ] && [ "$item_count" -gt "0" ]; then
-            items="${items}</pre>"
+            items="${items}</pre>\n<pre class=\"CSS_CLASS\">\n"
             item_count="$((item_count + 1 ))"
             items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
             item_status=""
+            item_title="yes"
         elif [ "$item_count" -gt "0" ] && [ "$item_pointer" -ne "$item_count" ]; then
-            items="${items}<pre class=\"CSS_CLASS\">\n${line}\n"
+            items="${items}${line}\n"
             item_pointer="$((item_pointer + 1 ))"
         elif [ "$item_count" -gt "0" ]; then
             items="${items}${line}\n"
