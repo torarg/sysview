@@ -1,5 +1,6 @@
 # 0.2.2
 - css updates
+- detail view item reformatting
 
 # 0.2.1
 - add "filter by status" views
