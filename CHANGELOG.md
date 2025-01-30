@@ -1,3 +1,6 @@
+# 0.2.2
+- css updates
+
 # 0.2.1
 - add "filter by status" views
 - replace status legend with menu
