@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=0.2.2
+VERSION=0.2.3
 
 usage="usage: sysview [-huV] [-d DAYS] HTML_ROOT"
 cache_dir="$HOME/.cache/sysview"
