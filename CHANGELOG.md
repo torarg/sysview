@@ -1,3 +1,6 @@
+# 0.2.3
+- fix multi item report parsing
+
 # 0.2.2
 - css updates
 - detail view item reformatting

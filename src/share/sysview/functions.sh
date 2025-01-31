@@ -71,15 +71,15 @@ parse_report_items() {
     item_count=0
     item_pointer=0
     item_title="no"
+    items=""
     while read line; do
         if echo "$line" |egrep -q '^OK:|^CRITICAL:|^WARNING:|^UNKNOWN:'; then
             item_status="$(echo $line | cut -f 1 -d ':' |  tr '[:upper:]' '[:lower:]')"
-            items="${items}$(echo "Date: $date")\n--\n"
-        fi
-        if [ "$item_title" == "yes" ]; then
+            items="${items}Date: $date\n--\n${line}"
+            items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
+        elif [ "$item_title" == "yes" ]; then
             items="${items}<b>${line}</b>\n"
             item_title="no"
-            continue
         elif [ "$line" == "---" ] && [ "$item_count" -eq "0" ]; then
             item_count=1
             item_pointer=1
@@ -88,7 +88,7 @@ parse_report_items() {
         elif [ "$line" == "---" ] && [ "$item_count" -gt "0" ]; then
             items="${items}</pre>\n<pre class=\"CSS_CLASS\">\n"
             item_count="$((item_count + 1 ))"
-            items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
+            #items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
             item_status=""
             item_title="yes"
         elif [ "$item_count" -gt "0" ] && [ "$item_pointer" -ne "$item_count" ]; then
@@ -102,7 +102,6 @@ parse_report_items() {
         items="$(echo "$items" | sed '$ d')"
         items="$items\n</pre>"
     fi
-    items="$(echo "$items" | sed "s/CSS_CLASS/item_$item_status/g")"
     echo "$items"
 }
 
@@ -164,7 +163,7 @@ get_worst_status() {
 process_report() {
     worst_status="unknown"
     parse_report
-    report_items="$(echo "$report" | parse_report_items)"
+    report_items="$(echo -e "$report" | parse_report_items)"
     get_worst_status
     overview_part="${cache_dir}/${hostname}.html.overview.part"
     detail_view_part="${cache_dir}/${hostname}.html.detail.part.${type}"
@@ -180,8 +179,7 @@ process_report() {
 </a>
 EOF
 
-    echo "$report_items" >> $detail_view_part
-
+    echo "$report_items" > $detail_view_part
 }
 
 update_index_cache() {
@@ -206,10 +204,12 @@ update_host_cache() {
     # render detail views
     html_head "$hostname" > $tmp_detail_file
     html_main_start >> $tmp_detail_file
-    for status in $STATUSES; do
-        for file in ${cache_dir}/${hostname}.html.detail.part.*; do
-            grep -q "<pre class=\"item_$status\">" $file && cat $file >> $tmp_detail_file
+    for file in ${cache_dir}/${hostname}.html.detail.part.*; do
+        item_updated="no"
+        for status in $STATUSES; do
+            grep -q "<pre class=\"item_$status\">" $file && cat $file >> $tmp_detail_file && item_updated="yes" && break
         done
+        [ "$host_updated" == "yes" ] && continue
     done
     html_main_end >> $tmp_detail_file
     html_foot >> $tmp_detail_file
