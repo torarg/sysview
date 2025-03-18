@@ -1,3 +1,6 @@
+# 0.2.4
+- fix item output formatting
+
 # 0.2.3
 - fix multi item report parsing
 
