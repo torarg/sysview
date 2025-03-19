@@ -26,7 +26,7 @@ html_root_name="$(realpath $html_root | sed 's|/|_|g')"
 cache_dir="${cache_dir}/${html_root_name}"
 lock_file="${cache_dir}/.lock"
 
-[ -z "$html_root" ] && echo "error: no html root\n$usage" >&2 && exit 1
+[ -z "$html_root" ] && html_root="$(pwd)"
 [ ! -d "$cache_dir" ] && mkdir -p "$cache_dir" 
 
 (
