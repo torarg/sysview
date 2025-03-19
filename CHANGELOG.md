@@ -1,3 +1,7 @@
+# 0.2.5
+- use current working dir as default output dir
+- exit on errors (set errexit)
+
 # 0.2.4
 - fix item output formatting
 
