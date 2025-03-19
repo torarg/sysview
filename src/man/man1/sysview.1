@@ -7,7 +7,7 @@
 .Sh SYNOPSIS
 .Nm sysview
 .Op Fl dhuV
-.Ar directory
+.Op directory
 .Sh DESCRIPTION
 .Nm
 generates static html monitoring dashboards
@@ -16,6 +16,10 @@ from
 compliant reports received on stdin.
 The generated files are written to a given output
 .Ar directory .
+.Pp
+If
+.Ar directory
+is not specified, the current working directory will be used instead.
 .Pp
 To avoid potentially harmful parallel execution,
 .Nm
