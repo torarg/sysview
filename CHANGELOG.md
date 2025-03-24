@@ -1,3 +1,6 @@
+# 0.2.6 (unreleased)
+- fix incorrect html header tag
+
 # 0.2.5
 - use current working dir as default output dir
 - exit on errors (set errexit)
