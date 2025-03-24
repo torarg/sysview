@@ -176,7 +176,7 @@ process_report() {
     cat > ${overview_part} <<EOF
 <a href="$hostname.html">
     <div class="tile_$worst_status">
-        <h4>$hostname</h5>
+        <h4>$hostname</h4>
         <p>$date</p>
     </div>
 </a>
